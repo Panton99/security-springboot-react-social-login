@@ -19,6 +19,11 @@
         <java.version>17</java.version>
         <jjwt.version>0.11.5</jjwt.version>
         <springdoc-openapi.version>2.1.0</springdoc-openapi.version>
+        <!--Sonarqube properties-->
+        <sonar.projectKey>your_project_key</sonar.projectKey>
+        <sonar.projectName>your_project_name</sonar.projectName>
+        <sonar.host.url>http://localhost:9000</sonar.host.url>
+        <sonar.login>your_sonar_token</sonar.login>
     </properties>
 
     <dependencies>
@@ -95,6 +100,12 @@
                         </exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+            <!--Sonarqube plugin-->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.10.0.2594</version> <!-- Adjust version as needed -->
             </plugin>
         </plugins>
     </build>
