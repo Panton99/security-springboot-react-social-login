@@ -33,8 +33,14 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - name: Create sonar-project.properties
+        run: |
+            echo "sonar.projectKey=security-react-springboot-app" > sonar-project.properties
+            echo "sonar.projectName='security-react-springboot-app'" >> sonar-project.properties
+            echo "sonar.projectVersion=1.0" >> sonar-project.properties
+            echo "sonar.sources=src" >> sonar-project.properties
+            echo "sonar.sourceEncoding=UTF-8" >> sonar-project.properties
+            echo "sonar.host.url=${{ secrets.SONAR_HOST_URL }}" >> sonar-project.properties
+            echo "sonar.login=${{ secrets.SONAR_TOKEN }}" >> sonar-project.properties
       - name: Build and analyze
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=security-react-springboot-app -Dsonar.projectName='security-react-springboot-app'
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
