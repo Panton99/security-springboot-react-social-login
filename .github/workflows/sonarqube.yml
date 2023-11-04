@@ -44,3 +44,4 @@ jobs:
             echo "sonar.login=${{ secrets.SONAR_TOKEN }}" >> sonar-project.properties
       - name: Build and analyze
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        working-directory: ./movie-api
