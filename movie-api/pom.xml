@@ -20,11 +20,11 @@
         <java.version>17</java.version>
         <jjwt.version>0.11.5</jjwt.version>
         <springdoc-openapi.version>2.1.0</springdoc-openapi.version>
-        <!--Sonarqube properties-->
-        <sonar.projectKey>security-react-springboot-app</sonar.projectKey>
-        <sonar.projectName>'security-react-springboot-app'</sonar.projectName>
-        <sonar.host.url>http://localhost:9000</sonar.host.url>
-        <sonar.login>sqp_0977cc40d0237251666945f4c31c2c9736127c1b</sonar.login>
+<!--        &lt;!&ndash;Sonarqube properties&ndash;&gt;-->
+<!--        <sonar.projectKey>security-react-springboot-app</sonar.projectKey>-->
+<!--        <sonar.projectName>'security-react-springboot-app'</sonar.projectName>-->
+<!--        <sonar.login>${env.SONAR_TOKEN}</sonar.login>-->
+<!--        <sonar.host.url>${env.SONAR_HOST_URL}</sonar.host.url>-->
     </properties>
 
     <dependencies>
