@@ -30,4 +30,5 @@ jobs:
         run: npx snyk auth ${{ secrets.SNYK_TOKEN }}
 
       - name: Snyk Test
+        working-directory: ./movie-ui
         run: npx snyk test
