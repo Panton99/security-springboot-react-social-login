@@ -26,5 +26,6 @@ jobs:
         working-directory: ./movie-ui
         run: npm install
 
+
       - name: Snyk Test
         run: npx snyk test
