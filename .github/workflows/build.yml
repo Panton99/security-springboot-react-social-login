@@ -38,12 +38,5 @@ jobs:
             command: test --sarif
             args: --sarif-file-output=snyk_test.sarif
 
-      - name: Create SARIF directory & move SARIF files
-        run: |
-          mkdir sarif_files &&
-          mv snyk_test.sarif snyk_code_test.sarif sarif_files/
-      - name: Upload result to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: sarif_files
+\
 
