@@ -1,12 +1,49 @@
-on: push
+name: Security Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
 jobs:
   security:
+    name: Check for Vulnerabilities
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@master
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/node@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
-          args: --severity-threshold=low
+          node-version: 16
+
+      - name: Install Dependencies
+        working-directory: ./movie-ui
+        run: npm install
+
+      - name: Authenticate with Snyk
+        run: npx snyk auth ${{ secrets.SNYK_TOKEN }}
+
+      - name: Run Snyk test
+        uses: snyk/actions/node@master
+        continue-on-error: true
+        env:
+            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+            command: test --sarif
+            args: --sarif-file-output=snyk_test.sarif
+
+      - name: Create SARIF directory & move SARIF files
+        run: |
+          mkdir sarif_files &&
+          mv snyk_test.sarif snyk_code_test.sarif sarif_files/
+      - name: Upload result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: sarif_files
+
