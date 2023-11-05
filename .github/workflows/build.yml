@@ -24,7 +24,7 @@ jobs:
 
       - name: Install Dependencies
         working-directory: ./movie-ui
-        run: npm install
+        run: npm ci
 
       - name: Authenticate with Snyk
         run: npx snyk auth ${{ secrets.SNYK_TOKEN }}
