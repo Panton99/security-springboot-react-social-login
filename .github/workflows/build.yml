@@ -26,6 +26,8 @@ jobs:
         working-directory: ./movie-ui
         run: npm install
 
+      - name: Authenticate with Snyk
+        run: npx snyk auth
 
       - name: Snyk Test
         run: npx snyk test
