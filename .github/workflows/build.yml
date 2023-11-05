@@ -38,5 +38,5 @@ jobs:
             command: test --sarif
             args: --sarif-file-output=snyk_test.sarif
 
-\
+
 
