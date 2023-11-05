@@ -23,6 +23,7 @@ jobs:
           node-version: 16
 
       - name: Install Dependencies
+        working-directory: ./movie-ui
         run: npm install
 
       - name: Snyk Test
