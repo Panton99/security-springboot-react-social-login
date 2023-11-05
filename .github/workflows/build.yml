@@ -1,34 +1,12 @@
-name: Security Scan
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
+on: push
 jobs:
   security:
-    name: Check for Vulnerabilities
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          node-version: 16
-
-      - name: Install Dependencies
-        working-directory: ./movie-ui
-        run: npm ci
-
-      - name: Authenticate with Snyk
-        run: npx snyk auth ${{ secrets.SNYK_TOKEN }}
-
-      - name: Snyk Test
-        working-directory: ./movie-ui
-        run: npx snyk test
+          args: --severity-threshold=low
