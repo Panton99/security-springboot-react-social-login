@@ -4,6 +4,7 @@ import { Button, Form, Grid, Segment, Message } from 'semantic-ui-react'
 import { useAuth } from '../context/AuthContext'
 import { movieApi } from '../misc/MovieApi'
 import { parseJwt, handleLogError } from '../misc/Helpers'
+import zxcvbn from 'zxcvbn';
 
 function Signup() {
   const Auth = useAuth()
@@ -15,18 +16,38 @@ function Signup() {
   const [email, setEmail] = useState('')
   const [isError, setIsError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+  const [passwordStrength, setPasswordStrength] = useState(0);
 
   const handleInputChange = (e, { name, value }) => {
     if (name === 'username') {
       setUsername(value)
     } else if (name === 'password') {
       setPassword(value)
+      const result = zxcvbn(value);
+      setPasswordStrength(result.score); //set the score of the strength
     } else if (name === 'name') {
       setName(value)
     } else if (name === 'email') {
       setEmail(value)
     }
   }
+ //color of the password strength
+  const showColor = () => {
+    switch (passwordStrength) {
+      case 0:
+        return 'red';
+      case 1:
+        return 'orange';
+      case 2:
+        return 'lightgreen';
+      case 3:
+        return 'green';
+      case 4:
+        return 'blue';
+      default:
+        return 'black';
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -35,6 +56,12 @@ function Signup() {
       setIsError(true)
       setErrorMessage('Please, inform all fields!')
       return
+    }
+     // Check if the password is strong enough
+     if (passwordStrength < 3) {
+      setIsError(true);
+      setErrorMessage('Please choose a stronger password.');
+      return;
     }
 
     const user = { username, password, name, email }
@@ -94,6 +121,9 @@ function Signup() {
               type='password'
               onChange={handleInputChange}
             />
+            <div style={{padding: '2px', marginBottom:'10px', backgroundColor: showColor(),  borderRadius: '5px', color: 'white' }}>
+              Password Strength: {passwordStrength}
+            </div>
             <Form.Input
               fluid
               name='name'
