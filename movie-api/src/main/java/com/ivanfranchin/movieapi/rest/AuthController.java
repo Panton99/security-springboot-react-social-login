@@ -1,6 +1,7 @@
 package com.ivanfranchin.movieapi.rest;
 
 import com.ivanfranchin.movieapi.exception.DuplicatedUserInfoException;
+import com.ivanfranchin.movieapi.exception.WeakPasswordException;
 import com.ivanfranchin.movieapi.model.User;
 import com.ivanfranchin.movieapi.rest.dto.AuthResponse;
 import com.ivanfranchin.movieapi.rest.dto.LoginRequest;
@@ -8,6 +9,7 @@ import com.ivanfranchin.movieapi.rest.dto.SignUpRequest;
 import com.ivanfranchin.movieapi.security.TokenProvider;
 import com.ivanfranchin.movieapi.security.WebSecurityConfig;
 import com.ivanfranchin.movieapi.security.oauth2.OAuth2Provider;
+import com.ivanfranchin.movieapi.service.PasswordValidation;
 import com.ivanfranchin.movieapi.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
+    private final PasswordValidation passwordValidation;
 
     @PostMapping("/authenticate")
     public AuthResponse login(@Valid @RequestBody LoginRequest loginRequest) {
@@ -47,7 +50,10 @@ public class AuthController {
         if (userService.hasUserWithEmail(signUpRequest.getEmail())) {
             throw new DuplicatedUserInfoException(String.format("Email %s already been used", signUpRequest.getEmail()));
         }
-
+        //Check if the password is strong enough
+        if (!passwordValidation.isPasswordStrong(signUpRequest.getPassword())) {
+            throw new WeakPasswordException("Password is not strong enough.");
+        }
         userService.saveUser(mapSignUpRequestToUser(signUpRequest));
 
         String token = authenticateAndGetToken(signUpRequest.getUsername(), signUpRequest.getPassword());
