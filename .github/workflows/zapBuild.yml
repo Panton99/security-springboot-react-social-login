@@ -1,0 +1,43 @@
+name: Security Scan
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '14'
+
+      - name: Install Dependencies
+        working-directory: move-ui
+        run: npm install
+
+      - name: Start Application
+        working-directory: move-ui
+        run: npm start &
+
+      - name: ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.10.0
+        with:
+          target: http://localhost:3000
+          policies: movie-ui/zap-policy.json
+
+      - name: Stop Application
+        working-directory: move-ui
+        run: npm stop
+
+      - name: Upload ZAP Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: zap-report
+          path: move-ui/zap-report.html

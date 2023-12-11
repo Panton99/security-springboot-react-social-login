@@ -1,0 +1,17 @@
+{
+  "baseurl": "http://localhost:3000",
+  "ajaxSpider": true,
+  "maxChildren": 5,
+  "maxDepth": 5,
+  "spider": true,
+  "excludedUrls": [
+    ".*\\.css",
+    ".*\\.js",
+    ".*\\.png",
+    ".*\\.jpg",
+    ".*\\.jpeg",
+    ".*\\.gif",
+    ".*\\.woff",
+    ".*\\.woff2"
+  ]
+}
