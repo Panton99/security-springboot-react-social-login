@@ -19,11 +19,11 @@ jobs:
           node-version: '14'
 
       - name: Install Dependencies
-        working-directory: move-ui
+        working-directory: movie-ui
         run: npm install
 
       - name: Start Application
-        working-directory: move-ui
+        working-directory: movie-ui
         run: npm start &
 
       - name: ZAP Baseline Scan
@@ -33,11 +33,11 @@ jobs:
           policies: movie-ui/zap-policy.json
 
       - name: Stop Application
-        working-directory: move-ui
+        working-directory: movie-ui
         run: npm stop
 
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v2
         with:
           name: zap-report
-          path: move-ui/zap-report.html
+          path: movie-ui/zap-report.html
